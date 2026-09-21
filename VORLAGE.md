@@ -1,8 +1,3 @@
----
-title: Notaufnahme Textbausteine
-layout: default
----
-
 ## ANAMNESE [SAMPLER]
 
 SYMPTOME

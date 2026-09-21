@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notaufnahme Textbausteine</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="app-header-inner">
+    <h1>Notaufnahme Textbausteine</h1>
+    <div class="global-fields">
+      <div class="field-inline">
+        <span class="field-inline-label">Geschlecht</span>
+        <span class="radio-inline">
+          <label><input type="radio" name="g-sex" value="w" checked> weiblich</label>
+          <label><input type="radio" name="g-sex" value="m"> männlich</label>
+        </span>
+      </div>
+      <div class="field-inline">
+        <label class="field-inline-label" for="g-alter">Alter</label>
+        <input type="number" id="g-alter" min="0" max="120" placeholder="Jahre" class="w-70">
+      </div>
+      <button id="reset-btn" class="btn-secondary" type="button">Formular zurücksetzen</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="anamnese" type="button">Anamnese</button>
+  <button class="tab-btn" data-tab="status" type="button">Status</button>
+  <button class="tab-btn" data-tab="sono" type="button">Sono</button>
+  <button class="tab-btn" data-tab="verlauf" type="button">Verlauf</button>
+</nav>
+
+<main>
+
+<!-- ================= ANAMNESE ================= -->
+<section id="panel-anamnese" class="tab-panel active">
+  <div class="layout">
+    <form class="form-col" autocomplete="off">
+
+      <fieldset>
+        <legend>Vorstellung</legend>
+        <div class="field-row">
+          <div class="radiogroup">
+            <span class="group-label">Ankunft</span>
+            <label><input type="radio" name="a-vorst-modus" value="fuss" checked> fußläufig</label>
+            <label><input type="radio" name="a-vorst-modus" value="rtw"> über RTW</label>
+          </div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-vorst-verlauf" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-vorst-verlauf" value="chronisch"> chronisch</label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="a-vorst-anlass">Anlass / Beschwerden</label>
+          <input type="text" id="a-vorst-anlass" placeholder="z. B. Thoraxschmerzen">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Symptome</legend>
+        <p class="hint">O = Beginn · P = Auslöser/Provokation · Q = Charakter · R = Ausstrahlung · S = Stärke · T = zeitlicher Verlauf</p>
+        <div class="field">
+          <label for="a-leitsymptom">Leitsymptom</label>
+          <select id="a-leitsymptom">
+            <option value="">– auswählen –</option>
+            <option value="vigilanz">Vigilanzminderung</option>
+            <option value="dyspnoe">Dyspnoe</option>
+            <option value="thorax">Thoraxschmerzen</option>
+            <option value="bauch">Bauchschmerzen</option>
+            <option value="dysurie">Dysurie</option>
+            <option value="diarrhoe">Diarrhoe</option>
+            <option value="schwindel">Schwindel</option>
+            <option value="teerstuhl">Teerstuhl</option>
+            <option value="haematochezie">Hämatochezie</option>
+            <option value="sonstige">Sonstige Schmerzen</option>
+          </select>
+        </div>
+
+        <div class="symptom-group" data-show-if="a-leitsymptom=vigilanz" hidden>
+          <div class="field-row">
+            <div class="radiogroup">
+              <span class="group-label">Beginn</span>
+              <label><input type="radio" name="a-vig-beginn" value="ploetzlich" checked> plötzlich</label>
+              <label><input type="radio" name="a-vig-beginn" value="schleichend"> schleichend</label>
+            </div>
+            <div class="field"><label for="a-vig-dauer">Dauer</label><input type="text" id="a-vig-dauer" placeholder="X Tage"></div>
+          </div>
+          <label class="check"><input type="checkbox" id="a-vig-gcs" checked> GCS 15, Orientierung 4-fach vorhanden</label>
+          <div class="field"><label for="a-vig-ausgangszustand">Ausgangszustand</label><input type="text" id="a-vig-ausgangszustand" placeholder="z. B. demenziellem"></div>
+          <div class="checklist">
+            <label><input type="checkbox" id="a-vig-infekt"> V. a. Infekt</label>
+            <label><input type="checkbox" id="a-vig-neuro"> neurologische Auffälligkeiten</label>
+          </div>
+        </div>
+
+        <div class="symptom-group" data-show-if="a-leitsymptom=dyspnoe" hidden>
+          <div class="opqrst-row">
+            <label class="mini"><span>O</span><input type="text" id="a-dysp-onset"></label>
+            <label class="mini"><span>P (Lage/Belastung)</span><input type="text" id="a-dysp-provokation"></label>
+            <label class="mini"><span>T</span><input type="text" id="a-dysp-verlauf"></label>
+          </div>
+          <div class="field-row">
+            <div class="radiogroup">
+              <span class="group-label">Q</span>
+              <label><input type="radio" name="a-dysp-qualitaet" value="insp"> inspiratorisch</label>
+              <label><input type="radio" name="a-dysp-qualitaet" value="exsp"> exspiratorisch</label>
+            </div>
+            <div class="field"><label>NYHA</label>
+              <select id="a-dysp-nyha"><option value="">–</option><option>I</option><option>II</option><option>III</option><option>IV</option></select>
+            </div>
+          </div>
+          <div class="checklist">
+            <label><input type="checkbox" id="a-dysp-husten"> Husten/Auswurf</label>
+            <label><input type="checkbox" id="a-dysp-fieber"> Fieber</label>
+            <label><input type="checkbox" id="a-dysp-ap"> Angina pectoris</label>
+            <label><input type="checkbox" id="a-dysp-haemoptysen"> Hämoptysen</label>
+          </div>
+        </div>
+
+        <div class="symptom-group" data-show-if="a-leitsymptom=thorax" hidden>
+          <div class="opqrst-row">
+            <label class="mini"><span>O</span><input type="text" id="a-thor-onset"></label>
+            <label class="mini"><span>P</span><input type="text" id="a-thor-provokation"></label>
+            <label class="mini"><span>Q</span><input type="text" id="a-thor-qualitaet"></label>
+            <label class="mini"><span>R</span><input type="text" id="a-thor-region"></label>
+            <label class="mini"><span>S (0–10)</span><input type="number" min="0" max="10" id="a-thor-staerke"></label>
+            <label class="mini"><span>T</span><input type="text" id="a-thor-verlauf"></label>
+          </div>
+          <div class="checklist">
+            <label><input type="checkbox" id="a-thor-rf"> kardiovask. Risikofaktoren</label>
+            <label><input type="checkbox" id="a-thor-kaltschweiss"> Kaltschweißigkeit</label>
+            <label><input type="checkbox" id="a-thor-neuro"> neurologische Auffälligkeiten</label>
+            <label><input type="checkbox" id="a-thor-dyspnoe"> Dyspnoe</label>
+            <label><input type="checkbox" id="a-thor-palpitation"> Palpitationen</label>
+          </div>
+        </div>
+
+        <div class="symptom-group" data-show-if="a-leitsymptom=bauch" hidden>
+          <div class="opqrst-row">
+            <label class="mini"><span>O</span><input type="text" id="a-bauch-onset"></label>
+            <label class="mini"><span>P</span><input type="text" id="a-bauch-provokation"></label>
+            <label class="mini"><span>Q</span><input type="text" id="a-bauch-qualitaet"></label>
+            <label class="mini"><span>R</span><input type="text" id="a-bauch-region"></label>
+            <label class="mini"><span>S (0–10)</span><input type="number" min="0" max="10" id="a-bauch-staerke"></label>
+            <label class="mini"><span>T</span><input type="text" id="a-bauch-verlauf"></label>
+          </div>
+          <label class="check"><input type="checkbox" id="a-bauch-erbrechen"> Erbrechen/Übelkeit</label>
+          <div class="radiogroup">
+            <span class="group-label">Stuhl</span>
+            <label><input type="radio" name="a-bauch-stuhl" value="unauffaellig" checked> unauffällig</label>
+            <label><input type="radio" name="a-bauch-stuhl" value="waessrig"> wässrig</label>
+            <label><input type="radio" name="a-bauch-stuhl" value="blutig"> blutig</label>
+            <label><input type="radio" name="a-bauch-stuhl" value="schleimig"> schleimig</label>
+            <label><input type="radio" name="a-bauch-stuhl" value="fettig"> fettig</label>
+          </div>
+          <div class="field-row">
+            <label class="check"><input type="checkbox" id="a-bauch-obstipation" checked> keine Obstipation</label>
+            <div class="field"><label for="a-bauch-letzterstuhl">letzter Stuhlgang</label><input type="text" id="a-bauch-letzterstuhl" placeholder="vor X Tagen"></div>
+          </div>
+        </div>
+
+        <div class="symptom-group" data-show-if="a-leitsymptom=dysurie" hidden>
+          <div class="opqrst-row">
+            <label class="mini"><span>O</span><input type="text" id="a-dys-onset"></label>
+            <label class="mini"><span>T</span><input type="text" id="a-dys-verlauf"></label>
+          </div>
+          <div class="checklist">
+            <label><input type="checkbox" id="a-dys-pollakisurie"> Pollakisurie/Urge</label>
+            <label><input type="checkbox" id="a-dys-fieber"> Fieber/Schüttelfrost</label>
+            <label><input type="checkbox" id="a-dys-ausfluss"> genitaler Ausfluss/Juckreiz</label>
+            <label><input type="checkbox" id="a-dys-flanke"> Flankenschmerzen</label>
+          </div>
+        </div>
+
+        <div class="symptom-group" data-show-if="a-leitsymptom=diarrhoe" hidden>
+          <div class="radiogroup">
+            <span class="group-label">Qualität</span>
+            <label><input type="radio" name="a-diarr-qualitaet" value="waessrig" checked> wässrig</label>
+            <label><input type="radio" name="a-diarr-qualitaet" value="blutig"> blutig</label>
+            <label><input type="radio" name="a-diarr-qualitaet" value="schleimig"> schleimig</label>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="a-diarr-dauer">Dauer</label><input type="text" id="a-diarr-dauer" placeholder="seit X Tagen"></div>
+            <div class="field"><label for="a-diarr-frequenz">Frequenz</label><input type="text" id="a-diarr-frequenz" placeholder="X mal/Tag"></div>
+          </div>
+          <div class="radiogroup">
+            <span class="group-label">Vorbekannt</span>
+            <label><input type="radio" name="a-diarr-ursache" value="" checked> –</label>
+            <label><input type="radio" name="a-diarr-ursache" value="ced"> CED</label>
+            <label><input type="radio" name="a-diarr-ursache" value="infektion"> Infektion</label>
+            <label><input type="radio" name="a-diarr-ursache" value="immunsuppression"> Immunsuppression</label>
+          </div>
+          <div class="field"><label for="a-diarr-ursache-text">Anmerkung</label><input type="text" id="a-diarr-ursache-text"></div>
+        </div>
+
+        <div class="symptom-group" data-show-if="a-leitsymptom=schwindel" hidden>
+          <div class="field-row">
+            <div class="radiogroup">
+              <span class="group-label">Typ</span>
+              <label><input type="radio" name="a-schwindel-typ" value="dreh" checked> Drehschwindel</label>
+              <label><input type="radio" name="a-schwindel-typ" value="schwank"> Schwankschwindel</label>
+            </div>
+            <div class="radiogroup">
+              <span class="group-label">Beginn</span>
+              <label><input type="radio" name="a-schwindel-beginn" value="ploetzlich" checked> plötzlich</label>
+              <label><input type="radio" name="a-schwindel-beginn" value="schleichend"> schleichend</label>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="a-schwindel-dauer">Dauer</label><input type="text" id="a-schwindel-dauer" placeholder="seit X Tagen"></div>
+            <div class="field"><label for="a-schwindel-trigger">Auslöser</label><input type="text" id="a-schwindel-trigger" placeholder="Lage/Kopfbewegung/Belastung"></div>
+          </div>
+          <div class="checklist">
+            <label><input type="checkbox" id="a-schwindel-neuro"> neurologische Auffälligkeiten</label>
+            <label><input type="checkbox" id="a-schwindel-hoerminderung"> Hörminderung/Tinnitus</label>
+            <label><input type="checkbox" id="a-schwindel-kardial"> kardiale Leitsymptome</label>
+          </div>
+        </div>
+
+        <div class="symptom-group" data-show-if="a-leitsymptom=teerstuhl" hidden>
+          <div class="field-row">
+            <div class="field"><label for="a-teer-dauer">Dauer</label><input type="text" id="a-teer-dauer" placeholder="seit X Tagen"></div>
+            <div class="field"><label for="a-teer-frequenz">Frequenz</label><input type="text" id="a-teer-frequenz" placeholder="x-mal pro Tag"></div>
+          </div>
+          <div class="checklist">
+            <label><input type="checkbox" id="a-teer-haematochezie"> Hämatochezie</label>
+            <label><input type="checkbox" id="a-teer-haematemesis"> Hämatemesis</label>
+            <label><input type="checkbox" id="a-teer-oberbauch"> Oberbauchschmerzen</label>
+            <label><input type="checkbox" id="a-teer-kardial"> kardiale Symptome</label>
+          </div>
+        </div>
+
+        <div class="symptom-group" data-show-if="a-leitsymptom=haematochezie" hidden>
+          <div class="opqrst-row">
+            <label class="mini"><span>O (Dauer)</span><input type="text" id="a-haem-dauer" placeholder="seit X Tagen"></label>
+            <label class="mini"><span>R</span><input type="text" id="a-haem-region"></label>
+            <label class="mini"><span>S (Frequenz)</span><input type="text" id="a-haem-frequenz" placeholder="x-mal/Tag"></label>
+          </div>
+          <div class="radiogroup">
+            <span class="group-label">Q</span>
+            <label><input type="radio" name="a-haem-qualitaet" value="hellrot" checked> hellrot</label>
+            <label><input type="radio" name="a-haem-qualitaet" value="dunkelrot"> dunkelrot</label>
+            <label><input type="radio" name="a-haem-qualitaet" value="teerartig"> teerartig</label>
+          </div>
+          <div class="checklist">
+            <label><input type="checkbox" id="a-haem-bauchschmerz"> Bauchschmerzen</label>
+            <label><input type="checkbox" id="a-haem-gewichtsverlust"> Gewichtsverlust</label>
+            <label><input type="checkbox" id="a-haem-diarrhoe"> Diarrhoe</label>
+            <label><input type="checkbox" id="a-haem-kardial"> kardiale Symptome</label>
+            <label><input type="checkbox" id="a-haem-defaekationsschmerz"> Defäkationsschmerz</label>
+          </div>
+        </div>
+
+        <div class="symptom-group" data-show-if="a-leitsymptom=sonstige" hidden>
+          <div class="opqrst-row">
+            <label class="mini"><span>O</span><input type="text" id="a-sonst-onset"></label>
+            <label class="mini"><span>P</span><input type="text" id="a-sonst-provokation"></label>
+            <label class="mini"><span>Q</span><input type="text" id="a-sonst-qualitaet"></label>
+            <label class="mini"><span>R</span><input type="text" id="a-sonst-region"></label>
+            <label class="mini"><span>S (0–10)</span><input type="number" min="0" max="10" id="a-sonst-staerke"></label>
+            <label class="mini"><span>T</span><input type="text" id="a-sonst-verlauf"></label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Kardiopulmonal</legend>
+        <div class="checklist">
+          <label><input type="checkbox" id="a-kp-dyspnoe" checked> keine Dyspnoe</label>
+          <label><input type="checkbox" id="a-kp-ap" checked> keine Angina pectoris</label>
+          <label><input type="checkbox" id="a-kp-palpitationen" checked> keine Palpitationen</label>
+          <label><input type="checkbox" id="a-kp-haemoptysen" checked> keine Hämoptysen</label>
+        </div>
+        <div class="radiogroup">
+          <span class="group-label">Leistungsfähigkeit</span>
+          <label><input type="radio" name="a-kp-leistung" value="gut" checked> gut</label>
+          <label><input type="radio" name="a-kp-leistung" value="eingeschraenkt"> eingeschränkt</label>
+        </div>
+        <div class="field" data-show-if="a-kp-leistung=eingeschraenkt" hidden>
+          <label for="a-kp-leistung-text">Details</label>
+          <input type="text" id="a-kp-leistung-text">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Vegetativ</legend>
+        <div class="checklist">
+          <label><input type="checkbox" id="a-veg-appetit" checked> Appetit gut</label>
+          <label><input type="checkbox" id="a-veg-durst" checked> Durst/Trinkmenge unverändert</label>
+          <label><input type="checkbox" id="a-veg-stuhlgang" checked> Stuhlgang unauffällig</label>
+          <label><input type="checkbox" id="a-veg-miktion" checked> Miktion unauffällig</label>
+          <label><input type="checkbox" id="a-veg-nykturie" checked> keine Nykturie</label>
+        </div>
+        <label class="check"><input type="checkbox" id="a-veg-infekt" checked> keine Infektzeichen</label>
+        <div class="field" data-show-if="a-veg-infekt=off" hidden>
+          <label for="a-veg-infekt-text">Infektzeichen</label>
+          <input type="text" id="a-veg-infekt-text" placeholder="z. B. Husten, Auswurf, Diarrhoe">
+        </div>
+        <div class="field-row">
+          <label class="check"><input type="checkbox" id="a-veg-schlaf" checked> Schlaf unauffällig</label>
+          <label class="check"><input type="checkbox" id="a-veg-nachtschweiss" checked> kein Nachtschweiß</label>
+          <label class="check"><input type="checkbox" id="a-veg-fieber" checked> kein Fieber</label>
+        </div>
+        <div class="radiogroup">
+          <span class="group-label">Gewicht</span>
+          <label><input type="radio" name="a-veg-gewicht" value="konstant" checked> konstant</label>
+          <label><input type="radio" name="a-veg-gewicht" value="abnehmend"> abnehmend</label>
+          <label><input type="radio" name="a-veg-gewicht" value="zunehmend"> zunehmend</label>
+        </div>
+        <div class="field-row" data-show-if="a-veg-gewicht=abnehmend|zunehmend" hidden>
+          <div class="field"><label for="a-veg-gewicht-von">von (kg)</label><input type="number" id="a-veg-gewicht-von" class="w-70"></div>
+          <div class="field"><label for="a-veg-gewicht-auf">auf (kg)</label><input type="number" id="a-veg-gewicht-auf" class="w-70"></div>
+          <div class="field"><label for="a-veg-gewicht-monate">in (Monaten)</label><input type="number" id="a-veg-gewicht-monate" class="w-70"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Substanzanamnese</legend>
+        <div class="radiogroup">
+          <span class="group-label">Rauchen</span>
+          <label><input type="radio" name="a-sub-raucher" value="nein" checked> Nichtraucher/in</label>
+          <label><input type="radio" name="a-sub-raucher" value="ja"> Raucher/in</label>
+          <label><input type="radio" name="a-sub-raucher" value="ex"> Ex-Raucher/in</label>
+        </div>
+        <div class="field"><label for="a-sub-py">Packyears</label><input type="text" id="a-sub-py" class="w-100" placeholder="xx py"></div>
+        <div class="radiogroup">
+          <span class="group-label">Alkohol</span>
+          <label><input type="radio" name="a-sub-alkohol" value="kein" checked> kein Konsum</label>
+          <label><input type="radio" name="a-sub-alkohol" value="gelegentlich"> gelegentlich</label>
+          <label><input type="radio" name="a-sub-alkohol" value="regelmaessig"> regelmäßig</label>
+        </div>
+        <div class="field"><label for="a-sub-alkohol-text">Anmerkung</label><input type="text" id="a-sub-alkohol-text"></div>
+        <div class="radiogroup">
+          <span class="group-label">Drogen</span>
+          <label><input type="radio" name="a-sub-drogen" value="keine" checked> keine</label>
+          <label><input type="radio" name="a-sub-drogen" value="ja"> ja</label>
+        </div>
+        <div class="field"><label for="a-sub-drogen-text">Anmerkung</label><input type="text" id="a-sub-drogen-text"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Weitere Anamnese</legend>
+        <div class="field"><label for="a-allergien">Allergien</label><input type="text" id="a-allergien" placeholder="keine bekannt"></div>
+        <div class="field"><label for="a-familienanamnese">Familienanamnese</label><input type="text" id="a-familienanamnese" placeholder="unauffällig"></div>
+        <div class="field-row">
+          <div class="radiogroup">
+            <span class="group-label">Beruf</span>
+            <label><input type="radio" name="a-sozial-beruf" value="berufstaetig" checked> berufstätig</label>
+            <label><input type="radio" name="a-sozial-beruf" value="berentet"> berentet</label>
+          </div>
+          <div class="field"><label for="a-sozial-beruf-text">als</label><input type="text" id="a-sozial-beruf-text"></div>
+        </div>
+        <div class="radiogroup">
+          <span class="group-label">Wohnsituation</span>
+          <label><input type="radio" name="a-sozial-wohn" value="allein" checked> alleine lebend</label>
+          <label><input type="radio" name="a-sozial-wohn" value="partner"> mit Partner/in lebend</label>
+          <label><input type="radio" name="a-sozial-wohn" value="sonstige"> sonstige</label>
+        </div>
+        <div class="field" data-show-if="a-sozial-wohn=sonstige" hidden>
+          <label for="a-sozial-wohn-text">Details</label><input type="text" id="a-sozial-wohn-text">
+        </div>
+        <div class="field-row">
+          <label class="check"><input type="checkbox" id="a-sozial-pg" checked> kein Pflegegrad</label>
+          <div class="field" data-show-if="a-sozial-pg=off" hidden>
+            <label for="a-sozial-pg-grad">Pflegegrad</label><input type="text" id="a-sozial-pg-grad" class="w-100">
+          </div>
+        </div>
+        <div class="field"><label for="a-reiseanamnese">Reiseanamnese</label><input type="text" id="a-reiseanamnese" placeholder="unauffällig"></div>
+        <div class="field"><label for="a-operationen">Operationen</label><input type="text" id="a-operationen" placeholder="keine"></div>
+        <div class="field"><label for="a-medikation">Medikation</label><textarea id="a-medikation" rows="2" placeholder="IS? ABx/CTx/ITx? OAK/ASS? Opiate? Hormone?"></textarea></div>
+      </fieldset>
+    </form>
+
+    <div class="output-col">
+      <div class="output-box">
+        <div class="output-header">
+          <h2>Anamnese – Text</h2>
+          <button class="copy-btn" data-target="out-anamnese" type="button">In Zwischenablage kopieren</button>
+        </div>
+        <textarea id="out-anamnese" class="output" readonly rows="28"></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATUS ================= -->
+<section id="panel-status" class="tab-panel">
+  <div class="layout">
+    <form class="form-col" autocomplete="off">
+      <fieldset>
+        <legend>Allgemein</legend>
+        <div class="field-row">
+          <div class="field"><label for="s-az">Allgemeinzustand</label>
+            <select id="s-az">
+              <option value="gutem">gutem</option>
+              <option value="reduziertem">reduziertem</option>
+              <option value="kritischem">kritischem</option>
+              <option value="altersentsprechend gutem">altersentsprechend gutem</option>
+            </select>
+          </div>
+          <div class="field"><label for="s-ez">Ernährungszustand</label>
+            <select id="s-ez">
+              <option value="altersentsprechendem">altersentsprechendem</option>
+              <option value="normalgewichtigem">normalgewichtigem</option>
+              <option value="adipösem">adipösem</option>
+              <option value="übergewichtigem">übergewichtigem</option>
+              <option value="kachektischem">kachektischem</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="s-groesse">Größe (cm)</label><input type="number" id="s-groesse" class="w-100"></div>
+          <div class="field"><label for="s-gewicht">Gewicht (kg)</label><input type="number" id="s-gewicht" class="w-100"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Kopf und Hals</legend>
+        <label class="check"><input type="checkbox" id="s-kh-unauffaellig" checked> unauffällig, keine Halsveneneinflussstauung</label>
+        <div class="field" data-show-if="s-kh-unauffaellig=off" hidden>
+          <label for="s-kh-text">Abweichender Befund</label><input type="text" id="s-kh-text">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Cor</legend>
+        <div class="radiogroup">
+          <label><input type="radio" name="s-cor-aktion" value="rhythmisch" checked> rhythmisch</label>
+          <label><input type="radio" name="s-cor-aktion" value="arrhythmisch"> arrhythmisch</label>
+        </div>
+        <div class="radiogroup">
+          <span class="group-label">Herztöne</span>
+          <label><input type="radio" name="s-cor-toene" value="rein" checked> rein</label>
+          <label><input type="radio" name="s-cor-toene" value="pathologisch"> pathologisch</label>
+        </div>
+        <div class="field" data-show-if="s-cor-toene=pathologisch" hidden>
+          <label for="s-cor-toene-text">Befund</label><input type="text" id="s-cor-toene-text" placeholder="z. B. Systolikum">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Pulmo</legend>
+        <label class="check"><input type="checkbox" id="s-pulmo-belueftung" checked> seitengleich gut belüftet</label>
+        <div class="field" data-show-if="s-pulmo-belueftung=off" hidden>
+          <label for="s-pulmo-belueftung-text">Abweichung</label><input type="text" id="s-pulmo-belueftung-text">
+        </div>
+        <div class="radiogroup">
+          <span class="group-label">Klopfschall</span>
+          <label><input type="radio" name="s-pulmo-klopfschall" value="sonor" checked> sonor</label>
+          <label><input type="radio" name="s-pulmo-klopfschall" value="gedaempft"> gedämpft</label>
+        </div>
+        <div class="radiogroup">
+          <span class="group-label">Atemgeräusch</span>
+          <label><input type="radio" name="s-pulmo-ag" value="vesikulaer" checked> vesikulär</label>
+          <label><input type="radio" name="s-pulmo-ag" value="abgeschwaecht"> abgeschwächt</label>
+          <label><input type="radio" name="s-pulmo-ag" value="bronchial"> bronchial</label>
+        </div>
+        <label class="check"><input type="checkbox" id="s-pulmo-rg" checked> keine Rasselgeräusche</label>
+        <div class="field" data-show-if="s-pulmo-rg=off" hidden>
+          <label for="s-pulmo-rg-text">Befund</label><input type="text" id="s-pulmo-rg-text">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Abdomen</legend>
+        <div class="radiogroup">
+          <span class="group-label">Bauchdecke</span>
+          <label><input type="radio" name="s-abd-bauchdecke" value="weich" checked> weich</label>
+          <label><input type="radio" name="s-abd-bauchdecke" value="gespannt"> gespannt</label>
+        </div>
+        <label class="check"><input type="checkbox" id="s-abd-druckschmerz" checked> kein Druckschmerz</label>
+        <div class="field" data-show-if="s-abd-druckschmerz=off" hidden>
+          <label for="s-abd-druckschmerz-text">Lokalisation</label><input type="text" id="s-abd-druckschmerz-text">
+        </div>
+        <div class="checklist">
+          <label><input type="checkbox" id="s-abd-resistenzen" checked> keine Resistenzen tastbar</label>
+          <label><input type="checkbox" id="s-abd-heparlien" checked> Hepar et Lien nicht palpabel</label>
+          <label><input type="checkbox" id="s-abd-nierenlager" checked> Nierenlager indolent</label>
+        </div>
+        <div class="radiogroup">
+          <span class="group-label">Peristaltik</span>
+          <label><input type="radio" name="s-abd-peristaltik" value="regelrecht" checked> regelrecht</label>
+          <label><input type="radio" name="s-abd-peristaltik" value="lebhaft"> lebhaft</label>
+          <label><input type="radio" name="s-abd-peristaltik" value="spaerlich"> spärlich</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Extremitäten</legend>
+        <div class="checklist">
+          <label><input type="checkbox" id="s-ext-beweglich" checked> aktiv/passiv uneingeschränkt beweglich</label>
+          <label><input type="checkbox" id="s-ext-varikosis" checked> keine Varikosis</label>
+          <label><input type="checkbox" id="s-ext-oedeme" checked> keine Ödeme</label>
+        </div>
+        <div class="radiogroup">
+          <span class="group-label">Pulsstatus</span>
+          <label><input type="radio" name="s-ext-puls" value="regelrecht" checked> regelrecht</label>
+          <label><input type="radio" name="s-ext-puls" value="abgeschwaecht"> abgeschwächt</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>ZNS</legend>
+        <div class="checklist">
+          <label><input type="checkbox" id="s-zns-wach" checked> wach und 4-fach orientiert</label>
+          <label><input type="checkbox" id="s-zns-perrl" checked> PERRL</label>
+          <label><input type="checkbox" id="s-zns-motorik" checked> bewegt 4/4 Extremitäten spontan</label>
+        </div>
+        <div class="radiogroup">
+          <span class="group-label">Stand und Gang</span>
+          <label><input type="radio" name="s-zns-gang" value="unauffaellig" checked> unauffällig</label>
+          <label><input type="radio" name="s-zns-gang" value="auffaellig"> auffällig</label>
+        </div>
+        <div class="field" data-show-if="s-zns-gang=auffaellig" hidden>
+          <label for="s-zns-gang-text">Befund</label><input type="text" id="s-zns-gang-text">
+        </div>
+      </fieldset>
+    </form>
+
+    <div class="output-col">
+      <div class="output-box">
+        <div class="output-header">
+          <h2>Status – Text</h2>
+          <button class="copy-btn" data-target="out-status" type="button">In Zwischenablage kopieren</button>
+        </div>
+        <textarea id="out-status" class="output" readonly rows="20"></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SONO ================= -->
+<section id="panel-sono" class="tab-panel">
+  <div class="layout">
+    <form class="form-col" autocomplete="off">
+      <fieldset>
+        <legend>Abdomen-SONO</legend>
+        <label class="check"><input type="checkbox" id="o-abd-durchgefuehrt" checked> durchgeführt</label>
+        <div data-show-if="o-abd-durchgefuehrt=on">
+          <label class="check"><input type="checkbox" id="o-abd-leber" checked> Leber, Gallenblase und Gallenwege unauffällig</label>
+          <div class="field" data-show-if="o-abd-leber=off" hidden><input type="text" id="o-abd-leber-text"></div>
+
+          <label class="check"><input type="checkbox" id="o-abd-pankreas" checked> Pankreas soweit beurteilbar unauffällig</label>
+          <div class="field" data-show-if="o-abd-pankreas=off" hidden><input type="text" id="o-abd-pankreas-text"></div>
+
+          <label class="check"><input type="checkbox" id="o-abd-milznieren" checked> Milz und Nieren regelrecht, kein Harnstau</label>
+          <div class="field" data-show-if="o-abd-milznieren=off" hidden><input type="text" id="o-abd-milznieren-text"></div>
+
+          <label class="check"><input type="checkbox" id="o-abd-fluessigkeit" checked> keine freie Flüssigkeit/Luft</label>
+          <div class="field" data-show-if="o-abd-fluessigkeit=off" hidden><input type="text" id="o-abd-fluessigkeit-text"></div>
+
+          <label class="check"><input type="checkbox" id="o-abd-beurteilung" checked> kein sonographischer Hinweis auf akute intraabdominelle Pathologie</label>
+          <div class="field" data-show-if="o-abd-beurteilung=off" hidden><input type="text" id="o-abd-beurteilung-text"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Fokussiertes TTE</legend>
+        <label class="check"><input type="checkbox" id="o-tte-durchgefuehrt" checked> durchgeführt</label>
+        <div data-show-if="o-tte-durchgefuehrt=on">
+          <div class="radiogroup">
+            <span class="group-label">LV-Funktion</span>
+            <label><input type="radio" name="o-tte-lv" value="gut" checked> gut</label>
+            <label><input type="radio" name="o-tte-lv" value="mittel"> mittelgradig eingeschränkt</label>
+            <label><input type="radio" name="o-tte-lv" value="hoch"> hochgradig eingeschränkt</label>
+          </div>
+
+          <label class="check"><input type="checkbox" id="o-tte-rv" checked> rechter Ventrikel nicht dilatiert</label>
+          <div class="field" data-show-if="o-tte-rv=off" hidden><input type="text" id="o-tte-rv-text"></div>
+
+          <label class="check"><input type="checkbox" id="o-tte-perikard" checked> kein Perikarderguss</label>
+          <div class="field" data-show-if="o-tte-perikard=off" hidden><input type="text" id="o-tte-perikard-text"></div>
+
+          <label class="check"><input type="checkbox" id="o-tte-klappen" checked> keine höhergradigen Klappenvitien</label>
+          <div class="field" data-show-if="o-tte-klappen=off" hidden><input type="text" id="o-tte-klappen-text"></div>
+
+          <label class="check"><input type="checkbox" id="o-tte-rechtsherz" checked> keine relevante Rechtsherzbelastung</label>
+          <div class="field" data-show-if="o-tte-rechtsherz=off" hidden><input type="text" id="o-tte-rechtsherz-text"></div>
+
+          <label class="check"><input type="checkbox" id="o-tte-vci" checked> V. cava inferior nicht gestaut</label>
+          <div class="field" data-show-if="o-tte-vci=off" hidden><input type="text" id="o-tte-vci-text"></div>
+        </div>
+      </fieldset>
+    </form>
+
+    <div class="output-col">
+      <div class="output-box">
+        <div class="output-header">
+          <h2>Sono – Text</h2>
+          <button class="copy-btn" data-target="out-sono" type="button">In Zwischenablage kopieren</button>
+        </div>
+        <textarea id="out-sono" class="output" readonly rows="16"></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VERLAUF ================= -->
+<section id="panel-verlauf" class="tab-panel">
+  <div class="layout">
+    <form class="form-col" autocomplete="off">
+      <fieldset>
+        <legend>Aufnahme</legend>
+        <label class="check"><input type="checkbox" id="v-intro" checked> "Vorstellung bei o. g. Anamnese."</label>
+        <label class="check"><input type="checkbox" id="v-aufnahme-zustand" checked> Standardsatz: wach, orientiert, stabil, kompensiert</label>
+        <div class="field" data-show-if="v-aufnahme-zustand=off" hidden>
+          <label for="v-aufnahme-zustand-text">Abweichender Aufnahmebefund</label><input type="text" id="v-aufnahme-zustand-text">
+        </div>
+        <div class="radiogroup">
+          <span class="group-label">Körperliche Untersuchung</span>
+          <label><input type="radio" name="v-koerperlich" value="unauffaellig" checked> kein richtungsweisender Befund</label>
+          <label><input type="radio" name="v-koerperlich" value="pathologisch"> pathologisch</label>
+        </div>
+        <div class="field" data-show-if="v-koerperlich=pathologisch" hidden>
+          <label for="v-koerperlich-text">Befund</label><input type="text" id="v-koerperlich-text">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Apparative Diagnostik</legend>
+        <label class="check"><input type="checkbox" id="v-ekg-durchgefuehrt" checked> EKG durchgeführt</label>
+        <div class="radiogroup" data-show-if="v-ekg-durchgefuehrt=on">
+          <label><input type="radio" name="v-ekg-befund" value="unauffaellig" checked> unauffällig</label>
+          <label><input type="radio" name="v-ekg-befund" value="auffaellig"> auffällig</label>
+        </div>
+        <div class="field" data-show-if="v-ekg-befund=auffaellig" hidden>
+          <label for="v-ekg-text">Befund</label><input type="text" id="v-ekg-text">
+        </div>
+
+        <label class="check"><input type="checkbox" id="v-labor-durchgefuehrt" checked> Labor durchgeführt</label>
+        <div class="field" data-show-if="v-labor-durchgefuehrt=on">
+          <label for="v-labor-auffaellig">Auffällige Werte (leer = unauffällig)</label><input type="text" id="v-labor-auffaellig">
+        </div>
+
+        <label class="check"><input type="checkbox" id="v-bga-durchgefuehrt" checked> venöse BGA durchgeführt</label>
+        <div class="field" data-show-if="v-bga-durchgefuehrt=on">
+          <label for="v-bga-auffaellig">Auffällige Werte (leer = unauffällig)</label><input type="text" id="v-bga-auffaellig">
+        </div>
+
+        <label class="check"><input type="checkbox" id="v-sono-durchgefuehrt"> fokussierte Sonographie</label>
+        <div class="field" data-show-if="v-sono-durchgefuehrt=on" hidden>
+          <label for="v-sono-text">Befund</label><input type="text" id="v-sono-text">
+        </div>
+
+        <label class="check"><input type="checkbox" id="v-rxthorax-durchgefuehrt"> Röntgen-Thorax</label>
+        <div class="field" data-show-if="v-rxthorax-durchgefuehrt=on" hidden>
+          <label for="v-rxthorax-text">Befund</label><input type="text" id="v-rxthorax-text">
+        </div>
+
+        <label class="check"><input type="checkbox" id="v-ct-durchgefuehrt"> CT durchgeführt</label>
+        <div class="field-row" data-show-if="v-ct-durchgefuehrt=on" hidden>
+          <div class="field"><label for="v-ct-bereich">Bereich</label><input type="text" id="v-ct-bereich" placeholder="z. B. Thorax/Abdomen"></div>
+          <div class="field"><label for="v-ct-text">Befund</label><input type="text" id="v-ct-text"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Therapie und Verlauf</legend>
+        <label class="check"><input type="checkbox" id="v-therapie-durchgefuehrt" checked> Therapieabsatz einfügen</label>
+        <div data-show-if="v-therapie-durchgefuehrt=on">
+          <div class="checklist">
+            <label><input type="checkbox" id="v-therapie-volumen"> intravasale Volumentherapie</label>
+            <label><input type="checkbox" id="v-therapie-antibiotisch"> antibiotische Therapie</label>
+            <label><input type="checkbox" id="v-therapie-supportiv" checked> supportive medikamentöse Therapie</label>
+          </div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="v-therapie-verlauf" value="besserung" checked> klinische Besserung</label>
+            <label><input type="radio" name="v-therapie-verlauf" value="stabil"> stabiler Verlauf, keine Befunddynamik</label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Zusammenschau</legend>
+        <div class="radiogroup">
+          <label><input type="radio" name="v-zusammenschau-modus" value="ausschluss" checked> kein Hinweis auf …</label>
+          <label><input type="radio" name="v-zusammenschau-modus" value="verdacht"> am ehesten Bild einer/eines …</label>
+        </div>
+        <div class="field"><label for="v-zusammenschau-diagnose">Diagnose</label><input type="text" id="v-zusammenschau-diagnose"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Disposition</legend>
+        <div class="radiogroup">
+          <label><input type="radio" name="v-disposition" value="entlassung" checked> Entlassung</label>
+          <label><input type="radio" name="v-disposition" value="stationaer"> stationäre Aufnahme</label>
+        </div>
+        <div class="field" data-show-if="v-disposition=stationaer" hidden>
+          <label for="v-disp-avd">AvD (Rücksprache)</label><input type="text" id="v-disp-avd">
+        </div>
+        <div data-show-if="v-disposition=entlassung">
+          <div class="field"><label for="v-disp-empfehlung">Empfehlung</label><input type="text" id="v-disp-empfehlung"></div>
+          <div class="field"><label for="v-disp-warnsymptome">Warnsymptome (Wiedervorstellung)</label><input type="text" id="v-disp-warnsymptome"></div>
+        </div>
+      </fieldset>
+    </form>
+
+    <div class="output-col">
+      <div class="output-box">
+        <div class="output-header">
+          <h2>Verlauf – Text</h2>
+          <button class="copy-btn" data-target="out-verlauf" type="button">In Zwischenablage kopieren</button>
+        </div>
+        <textarea id="out-verlauf" class="output" readonly rows="24"></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="app-footer">
+  <p>Alle Eingaben verbleiben ausschließlich lokal im Browser (localStorage). Es werden keine Daten an einen Server übertragen.</p>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
