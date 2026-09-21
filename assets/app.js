@@ -1,52 +1,5 @@
 'use strict';
 
-/* ---------- lightweight access gate ----------
-   Client-side only: keeps casual visitors and search-engine crawlers out.
-   This is NOT real security (page source is public) — do not rely on it
-   for anything sensitive. */
-const LOCK_HASH = '31d97ac3826e42756b76487d4be8ccf04b81f21ab9ac5daac30f0e4c4e25c794';
-const LOCK_STORAGE_KEY = 'notaufnahme-unlocked-v1';
-
-async function sha256Hex(text) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
-function setLocked(locked) {
-  const overlay = document.getElementById('lock-overlay');
-  if (!overlay) return;
-  overlay.hidden = !locked;
-  document.body.classList.toggle('locked', locked);
-}
-
-function initLock() {
-  const overlay = document.getElementById('lock-overlay');
-  const form = document.getElementById('lock-form');
-  const input = document.getElementById('lock-password');
-  const error = document.getElementById('lock-error');
-  if (!overlay || !form || !input || !error) return;
-
-  let unlocked = false;
-  try { unlocked = localStorage.getItem(LOCK_STORAGE_KEY) === '1'; } catch (e) { /* ignore */ }
-  setLocked(!unlocked);
-  if (!unlocked) input.focus();
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const hash = await sha256Hex(input.value);
-    if (hash === LOCK_HASH) {
-      try { localStorage.setItem(LOCK_STORAGE_KEY, '1'); } catch (err) { /* ignore */ }
-      error.hidden = true;
-      input.value = '';
-      setLocked(false);
-    } else {
-      error.hidden = false;
-      input.value = '';
-      input.focus();
-    }
-  });
-}
-
 /* ---------- generic DOM helpers ---------- */
 const $ = (id) => document.getElementById(id);
 const v = (id) => { const el = $(id); return el ? el.value.trim() : ''; };
@@ -665,7 +618,6 @@ function initReset() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  initLock();
   loadFromStorage();
   initTabs();
   initCopyButtons();
