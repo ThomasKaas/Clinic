@@ -696,6 +696,10 @@
           <label for="v-disp-avd">AvD (Rücksprache)</label><input type="text" id="v-disp-avd">
         </div>
         <div data-show-if="v-disposition=entlassung">
+          <label class="check"><input type="checkbox" id="v-disp-entlassung-avd"> Rücksprache mit AvD</label>
+          <div class="field" data-show-if="v-disp-entlassung-avd=on" hidden>
+            <label for="v-disp-entlassung-avd-name">AvD (Rücksprache)</label><input type="text" id="v-disp-entlassung-avd-name">
+          </div>
           <div class="field"><label for="v-disp-empfehlung">Empfehlung</label><input type="text" id="v-disp-empfehlung"></div>
           <div class="field"><label for="v-disp-warnsymptome">Warnsymptome (Wiedervorstellung)</label><input type="text" id="v-disp-warnsymptome"></div>
         </div>

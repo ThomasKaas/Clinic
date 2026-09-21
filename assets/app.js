@@ -476,7 +476,10 @@ function generateVerlauf() {
     out.push(`Nach Rücksprache mit dem AvD ${v('v-disp-avd') || '___'} erfolgt freundlicherweise die stationäre Übernahme zur weiteren Diagnostik und Therapie.`);
   } else {
     out.push('Bei Entlassung:');
-    out.push(`Bei stabilem klinischem Zustand und fehlendem Hinweis auf eine akut stationär behandlungsbedürftige Erkrankung erfolgt die Entlassung in die Häuslichkeit. Wir empfehlen ${v('v-disp-empfehlung') || '___'} sowie die zeitnahe ambulante Weiterbetreuung. Bei klinischer Verschlechterung, insbesondere ${v('v-disp-warnsymptome') || '___'}, bitten wir um umgehende ärztliche Wiedervorstellung.`);
+    const entlassungIntro = c('v-disp-entlassung-avd')
+      ? `Nach Rücksprache mit dem AvD ${v('v-disp-entlassung-avd-name') || '___'} erfolgt bei stabilem klinischem Zustand und fehlendem Hinweis auf eine akut stationär behandlungsbedürftige Erkrankung die Entlassung in die Häuslichkeit.`
+      : 'Bei stabilem klinischem Zustand und fehlendem Hinweis auf eine akut stationär behandlungsbedürftige Erkrankung erfolgt die Entlassung in die Häuslichkeit.';
+    out.push(`${entlassungIntro} Wir empfehlen ${v('v-disp-empfehlung') || '___'} sowie die zeitnahe ambulante Weiterbetreuung. Bei klinischer Verschlechterung, insbesondere ${v('v-disp-warnsymptome') || '___'}, bitten wir um umgehende ärztliche Wiedervorstellung.`);
   }
 
   return out.join('\n');
