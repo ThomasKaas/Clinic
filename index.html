@@ -60,6 +60,7 @@
           <label for="a-vorst-anlass">Anlass / Beschwerden</label>
           <input type="text" id="a-vorst-anlass" placeholder="z. B. Thoraxschmerzen">
         </div>
+        <p class="hint">"Verlauf" und "Anlass/Beschwerden" werden nur verwendet, wenn unten kein Leitsymptom ausgewählt ist – sobald mindestens eines angeklickt ist, schließen sich die Leitsymptome (mit eigenem Verlauf) direkt an den Einleitungssatz an.</p>
       </fieldset>
 
       <fieldset>
@@ -82,6 +83,12 @@
         </div>
 
         <div class="symptom-group" data-show-if="a-sym-vigilanz=on" hidden>
+          <div class="symptom-group-title">Vigilanzminderung</div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-vig-akuitaet" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-vig-akuitaet" value="chronisch"> chronisch</label>
+          </div>
           <div class="field-row">
             <div class="radiogroup">
               <span class="group-label">Beginn</span>
@@ -99,6 +106,12 @@
         </div>
 
         <div class="symptom-group" data-show-if="a-sym-dyspnoe=on" hidden>
+          <div class="symptom-group-title">Dyspnoe</div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-dysp-akuitaet" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-dysp-akuitaet" value="chronisch"> chronisch</label>
+          </div>
           <div class="opqrst-row">
             <label class="mini"><span>O</span><input type="text" id="a-dysp-onset"></label>
             <label class="mini"><span>P (Lage/Belastung)</span><input type="text" id="a-dysp-provokation"></label>
@@ -135,6 +148,12 @@
         </div>
 
         <div class="symptom-group" data-show-if="a-sym-thorax=on" hidden>
+          <div class="symptom-group-title">Thoraxschmerzen</div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-thor-akuitaet" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-thor-akuitaet" value="chronisch"> chronisch</label>
+          </div>
           <div class="opqrst-row">
             <label class="mini"><span>O</span><input type="text" id="a-thor-onset"></label>
             <label class="mini"><span>P</span><input type="text" id="a-thor-provokation"></label>
@@ -153,6 +172,12 @@
         </div>
 
         <div class="symptom-group" data-show-if="a-sym-bauch=on" hidden>
+          <div class="symptom-group-title">Bauchschmerzen</div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-bauch-akuitaet" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-bauch-akuitaet" value="chronisch"> chronisch</label>
+          </div>
           <div class="opqrst-row">
             <label class="mini"><span>O</span><input type="text" id="a-bauch-onset"></label>
             <label class="mini"><span>P</span><input type="text" id="a-bauch-provokation"></label>
@@ -177,6 +202,12 @@
         </div>
 
         <div class="symptom-group" data-show-if="a-sym-dysurie=on" hidden>
+          <div class="symptom-group-title">Dysurie</div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-dys-akuitaet" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-dys-akuitaet" value="chronisch"> chronisch</label>
+          </div>
           <div class="opqrst-row">
             <label class="mini"><span>O</span><input type="text" id="a-dys-onset"></label>
             <label class="mini"><span>T</span><input type="text" id="a-dys-verlauf"></label>
@@ -190,6 +221,12 @@
         </div>
 
         <div class="symptom-group" data-show-if="a-sym-diarrhoe=on" hidden>
+          <div class="symptom-group-title">Diarrhoe</div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-diarr-akuitaet" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-diarr-akuitaet" value="chronisch"> chronisch</label>
+          </div>
           <div class="radiogroup">
             <span class="group-label">Qualität</span>
             <label><input type="radio" name="a-diarr-qualitaet" value="waessrig" checked> wässrig</label>
@@ -211,6 +248,12 @@
         </div>
 
         <div class="symptom-group" data-show-if="a-sym-schwindel=on" hidden>
+          <div class="symptom-group-title">Schwindel</div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-schwindel-akuitaet" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-schwindel-akuitaet" value="chronisch"> chronisch</label>
+          </div>
           <div class="field-row">
             <div class="radiogroup">
               <span class="group-label">Typ</span>
@@ -235,6 +278,12 @@
         </div>
 
         <div class="symptom-group" data-show-if="a-sym-teerstuhl=on" hidden>
+          <div class="symptom-group-title">Teerstuhl</div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-teer-akuitaet" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-teer-akuitaet" value="chronisch"> chronisch</label>
+          </div>
           <div class="field-row">
             <div class="field"><label for="a-teer-dauer">Dauer</label><input type="text" id="a-teer-dauer" placeholder="seit X Tagen"></div>
             <div class="field"><label for="a-teer-frequenz">Frequenz</label><input type="text" id="a-teer-frequenz" placeholder="x-mal pro Tag"></div>
@@ -248,6 +297,12 @@
         </div>
 
         <div class="symptom-group" data-show-if="a-sym-haematochezie=on" hidden>
+          <div class="symptom-group-title">Hämatochezie</div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-haem-akuitaet" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-haem-akuitaet" value="chronisch"> chronisch</label>
+          </div>
           <div class="opqrst-row">
             <label class="mini"><span>O (Dauer)</span><input type="text" id="a-haem-dauer" placeholder="seit X Tagen"></label>
             <label class="mini"><span>R</span><input type="text" id="a-haem-region"></label>
@@ -269,6 +324,12 @@
         </div>
 
         <div class="symptom-group" data-show-if="a-sym-sonstige=on" hidden>
+          <div class="symptom-group-title">Sonstige Schmerzen</div>
+          <div class="radiogroup">
+            <span class="group-label">Verlauf</span>
+            <label><input type="radio" name="a-sonst-akuitaet" value="akut" checked> akut</label>
+            <label><input type="radio" name="a-sonst-akuitaet" value="chronisch"> chronisch</label>
+          </div>
           <div class="opqrst-row">
             <label class="mini"><span>O</span><input type="text" id="a-sonst-onset"></label>
             <label class="mini"><span>P</span><input type="text" id="a-sonst-provokation"></label>
