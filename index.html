@@ -66,23 +66,22 @@
         <legend>Symptome</legend>
         <p class="hint">O = Beginn · P = Auslöser/Provokation · Q = Charakter · R = Ausstrahlung · S = Stärke · T = zeitlicher Verlauf</p>
         <div class="field">
-          <label for="a-leitsymptom">Leitsymptom</label>
-          <select id="a-leitsymptom">
-            <option value="">– auswählen –</option>
-            <option value="vigilanz">Vigilanzminderung</option>
-            <option value="dyspnoe">Dyspnoe</option>
-            <option value="thorax">Thoraxschmerzen</option>
-            <option value="bauch">Bauchschmerzen</option>
-            <option value="dysurie">Dysurie</option>
-            <option value="diarrhoe">Diarrhoe</option>
-            <option value="schwindel">Schwindel</option>
-            <option value="teerstuhl">Teerstuhl</option>
-            <option value="haematochezie">Hämatochezie</option>
-            <option value="sonstige">Sonstige Schmerzen</option>
-          </select>
+          <span class="group-label">Leitsymptome (Mehrfachauswahl möglich)</span>
+          <div class="checklist">
+            <label><input type="checkbox" id="a-sym-vigilanz"> Vigilanzminderung</label>
+            <label><input type="checkbox" id="a-sym-dyspnoe"> Dyspnoe</label>
+            <label><input type="checkbox" id="a-sym-thorax"> Thoraxschmerzen</label>
+            <label><input type="checkbox" id="a-sym-bauch"> Bauchschmerzen</label>
+            <label><input type="checkbox" id="a-sym-dysurie"> Dysurie</label>
+            <label><input type="checkbox" id="a-sym-diarrhoe"> Diarrhoe</label>
+            <label><input type="checkbox" id="a-sym-schwindel"> Schwindel</label>
+            <label><input type="checkbox" id="a-sym-teerstuhl"> Teerstuhl</label>
+            <label><input type="checkbox" id="a-sym-haematochezie"> Hämatochezie</label>
+            <label><input type="checkbox" id="a-sym-sonstige"> Sonstige Schmerzen</label>
+          </div>
         </div>
 
-        <div class="symptom-group" data-show-if="a-leitsymptom=vigilanz" hidden>
+        <div class="symptom-group" data-show-if="a-sym-vigilanz=on" hidden>
           <div class="field-row">
             <div class="radiogroup">
               <span class="group-label">Beginn</span>
@@ -99,7 +98,7 @@
           </div>
         </div>
 
-        <div class="symptom-group" data-show-if="a-leitsymptom=dyspnoe" hidden>
+        <div class="symptom-group" data-show-if="a-sym-dyspnoe=on" hidden>
           <div class="opqrst-row">
             <label class="mini"><span>O</span><input type="text" id="a-dysp-onset"></label>
             <label class="mini"><span>P (Lage/Belastung)</span><input type="text" id="a-dysp-provokation"></label>
@@ -116,14 +115,26 @@
             </div>
           </div>
           <div class="checklist">
-            <label><input type="checkbox" id="a-dysp-husten"> Husten/Auswurf</label>
+            <label><input type="checkbox" id="a-dysp-husten"> Husten</label>
+            <label><input type="checkbox" id="a-dysp-auswurf"> Auswurf</label>
             <label><input type="checkbox" id="a-dysp-fieber"> Fieber</label>
             <label><input type="checkbox" id="a-dysp-ap"> Angina pectoris</label>
             <label><input type="checkbox" id="a-dysp-haemoptysen"> Hämoptysen</label>
           </div>
+          <div class="field-row" data-show-if="a-dysp-husten=on" hidden>
+            <div class="field"><label for="a-dysp-husten-freq">Husten – Anzahl/Tag</label><input type="text" id="a-dysp-husten-freq" class="w-100"></div>
+          </div>
+          <div class="field-row" data-show-if="a-dysp-auswurf=on" hidden>
+            <div class="radiogroup">
+              <span class="group-label">Auswurf</span>
+              <label><input type="radio" name="a-dysp-auswurf-farbe" value="weisslich" checked> weißlich</label>
+              <label><input type="radio" name="a-dysp-auswurf-farbe" value="gelblich"> gelblich</label>
+            </div>
+            <div class="field"><label for="a-dysp-auswurf-freq">Auswurf – Anzahl/Tag</label><input type="text" id="a-dysp-auswurf-freq" class="w-100"></div>
+          </div>
         </div>
 
-        <div class="symptom-group" data-show-if="a-leitsymptom=thorax" hidden>
+        <div class="symptom-group" data-show-if="a-sym-thorax=on" hidden>
           <div class="opqrst-row">
             <label class="mini"><span>O</span><input type="text" id="a-thor-onset"></label>
             <label class="mini"><span>P</span><input type="text" id="a-thor-provokation"></label>
@@ -141,7 +152,7 @@
           </div>
         </div>
 
-        <div class="symptom-group" data-show-if="a-leitsymptom=bauch" hidden>
+        <div class="symptom-group" data-show-if="a-sym-bauch=on" hidden>
           <div class="opqrst-row">
             <label class="mini"><span>O</span><input type="text" id="a-bauch-onset"></label>
             <label class="mini"><span>P</span><input type="text" id="a-bauch-provokation"></label>
@@ -165,7 +176,7 @@
           </div>
         </div>
 
-        <div class="symptom-group" data-show-if="a-leitsymptom=dysurie" hidden>
+        <div class="symptom-group" data-show-if="a-sym-dysurie=on" hidden>
           <div class="opqrst-row">
             <label class="mini"><span>O</span><input type="text" id="a-dys-onset"></label>
             <label class="mini"><span>T</span><input type="text" id="a-dys-verlauf"></label>
@@ -178,7 +189,7 @@
           </div>
         </div>
 
-        <div class="symptom-group" data-show-if="a-leitsymptom=diarrhoe" hidden>
+        <div class="symptom-group" data-show-if="a-sym-diarrhoe=on" hidden>
           <div class="radiogroup">
             <span class="group-label">Qualität</span>
             <label><input type="radio" name="a-diarr-qualitaet" value="waessrig" checked> wässrig</label>
@@ -199,7 +210,7 @@
           <div class="field"><label for="a-diarr-ursache-text">Anmerkung</label><input type="text" id="a-diarr-ursache-text"></div>
         </div>
 
-        <div class="symptom-group" data-show-if="a-leitsymptom=schwindel" hidden>
+        <div class="symptom-group" data-show-if="a-sym-schwindel=on" hidden>
           <div class="field-row">
             <div class="radiogroup">
               <span class="group-label">Typ</span>
@@ -223,7 +234,7 @@
           </div>
         </div>
 
-        <div class="symptom-group" data-show-if="a-leitsymptom=teerstuhl" hidden>
+        <div class="symptom-group" data-show-if="a-sym-teerstuhl=on" hidden>
           <div class="field-row">
             <div class="field"><label for="a-teer-dauer">Dauer</label><input type="text" id="a-teer-dauer" placeholder="seit X Tagen"></div>
             <div class="field"><label for="a-teer-frequenz">Frequenz</label><input type="text" id="a-teer-frequenz" placeholder="x-mal pro Tag"></div>
@@ -236,7 +247,7 @@
           </div>
         </div>
 
-        <div class="symptom-group" data-show-if="a-leitsymptom=haematochezie" hidden>
+        <div class="symptom-group" data-show-if="a-sym-haematochezie=on" hidden>
           <div class="opqrst-row">
             <label class="mini"><span>O (Dauer)</span><input type="text" id="a-haem-dauer" placeholder="seit X Tagen"></label>
             <label class="mini"><span>R</span><input type="text" id="a-haem-region"></label>
@@ -257,7 +268,7 @@
           </div>
         </div>
 
-        <div class="symptom-group" data-show-if="a-leitsymptom=sonstige" hidden>
+        <div class="symptom-group" data-show-if="a-sym-sonstige=on" hidden>
           <div class="opqrst-row">
             <label class="mini"><span>O</span><input type="text" id="a-sonst-onset"></label>
             <label class="mini"><span>P</span><input type="text" id="a-sonst-provokation"></label>

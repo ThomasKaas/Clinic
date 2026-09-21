@@ -37,9 +37,28 @@ function sexForms() {
   return { code: 'w', noun: 'Patientin', nounGen: 'der Patientin', e: 'e', inSuffix: 'in' };
 }
 
-/* ---------- Anamnese: Leitsymptom block ---------- */
-function generateSymptomBlock(key) {
-  if (!key) return '';
+/* ---------- Anamnese: Leitsymptom blocks (multi-select) ---------- */
+const SYMPTOM_LABELS = {
+  vigilanz: 'Vigilanzminderung',
+  dyspnoe: 'Dyspnoe',
+  thorax: 'Thoraxschmerzen',
+  bauch: 'Bauchschmerzen',
+  dysurie: 'Dysurie',
+  diarrhoe: 'Diarrhoe',
+  schwindel: 'Schwindel',
+  teerstuhl: 'Teerstuhl',
+  haematochezie: 'Hämatochezie',
+  sonstige: 'Sonstige Schmerzen'
+};
+
+function selectedSymptomKeys() {
+  return Object.keys(SYMPTOM_LABELS).filter((k) => c('a-sym-' + k));
+}
+
+/* Each case returns { main, extra }: main is the core clause (no trailing
+   period, so several can be joined with "und"); extra is the accompanying
+   findings, attributed to its symptom label only when several are selected. */
+function buildSymptomBlock(key) {
   const parts = [];
   const P = (label, val) => { if (val) parts.push(`${label}: ${val}`); };
 
@@ -53,11 +72,10 @@ function generateSymptomBlock(key) {
         c('a-vig-infekt') ? 'Infektzeichen' : '',
         c('a-vig-neuro') ? 'neurologische Auffälligkeiten' : ''
       ], ' und ');
-      let s = `Vigilanzminderung: ${beginn}${dauer ? ' seit ' + dauer : ''}`;
-      s += gcs ? ', GCS 15 und Orientierung 4-fach vorhanden' : ', Vigilanz/Orientierung eingeschränkt';
-      s += `, bei ${ausgang || '___'} Ausgangszustand.`;
-      s += extra ? ` V. a. ${extra}.` : ' Kein Hinweis auf Infekt oder neurologisches Defizit.';
-      return s;
+      let main = `Vigilanzminderung: ${beginn}${dauer ? ' seit ' + dauer : ''}`;
+      main += gcs ? ', GCS 15 und Orientierung 4-fach vorhanden' : ', Vigilanz/Orientierung eingeschränkt';
+      main += `, bei ${ausgang || '___'} Ausgangszustand`;
+      return { main, extra: extra ? `V. a. ${extra}` : 'kein Hinweis auf Infekt oder neurologisches Defizit' };
     }
     case 'dyspnoe': {
       P('O', v('a-dysp-onset'));
@@ -67,17 +85,21 @@ function generateSymptomBlock(key) {
       const nyha = v('a-dysp-nyha');
       P('S', nyha ? `NYHA ${nyha}` : '');
       P('T', v('a-dysp-verlauf'));
+      const hustenFreq = v('a-dysp-husten-freq');
+      const husten = c('a-dysp-husten') ? `Husten${hustenFreq ? ' (' + hustenFreq + 'x/Tag)' : ''}` : '';
+      const auswurfFreq = v('a-dysp-auswurf-freq');
+      const auswurfFarbe = r('a-dysp-auswurf-farbe') === 'gelblich' ? 'gelblicher' : 'weißlicher';
+      const auswurf = c('a-dysp-auswurf') ? `${auswurfFarbe} Auswurf${auswurfFreq ? ' (' + auswurfFreq + 'x/Tag)' : ''}` : '';
       const extra = list([
-        c('a-dysp-husten') ? 'Husten/Auswurf' : '',
+        husten,
+        auswurf,
         c('a-dysp-fieber') ? 'Fieber' : '',
         c('a-dysp-ap') ? 'Angina pectoris' : '',
         c('a-dysp-haemoptysen') ? 'Hämoptysen' : ''
       ]);
-      let s = 'Dyspnoe';
-      if (parts.length) s += ` (${parts.join(', ')})`;
-      s += '.';
-      if (extra) s += ` Begleitend: ${extra}.`;
-      return s;
+      let main = 'Dyspnoe';
+      if (parts.length) main += ` (${parts.join(', ')})`;
+      return { main, extra };
     }
     case 'thorax': {
       P('O', v('a-thor-onset'));
@@ -94,11 +116,9 @@ function generateSymptomBlock(key) {
         c('a-thor-dyspnoe') ? 'Dyspnoe' : '',
         c('a-thor-palpitation') ? 'Palpitationen' : ''
       ]);
-      let s = 'Thoraxschmerzen';
-      if (parts.length) s += ` (${parts.join(', ')})`;
-      s += '.';
-      if (extra) s += ` Begleitend: ${extra}.`;
-      return s;
+      let main = 'Thoraxschmerzen';
+      if (parts.length) main += ` (${parts.join(', ')})`;
+      return { main, extra };
     }
     case 'bauch': {
       P('O', v('a-bauch-onset'));
@@ -108,19 +128,17 @@ function generateSymptomBlock(key) {
       const staerke = v('a-bauch-staerke');
       P('S', staerke ? `${staerke}/10` : '');
       P('T', v('a-bauch-verlauf'));
-      let s = 'Bauchschmerzen';
-      if (parts.length) s += ` (${parts.join(', ')})`;
-      s += '.';
+      let main = 'Bauchschmerzen';
+      if (parts.length) main += ` (${parts.join(', ')})`;
       const zusatz = [];
       if (c('a-bauch-erbrechen')) zusatz.push('Erbrechen/Übelkeit');
       const stuhl = r('a-bauch-stuhl');
       const stuhlLabel = { waessrig: 'wässriger Stuhl', blutig: 'blutiger Stuhl', schleimig: 'schleimiger Stuhl', fettig: 'fettiger Stuhl' }[stuhl];
       if (stuhlLabel) zusatz.push(stuhlLabel);
-      if (zusatz.length) s += ` ${cap(list(zusatz))}.`;
       const letzter = v('a-bauch-letzterstuhl');
-      s += c('a-bauch-obstipation') ? ' Keine Obstipation' : ' Obstipation';
-      s += letzter ? ` (letzter Stuhlgang vor ${letzter}).` : '.';
-      return s;
+      const obstipation = c('a-bauch-obstipation') ? 'keine Obstipation' : 'Obstipation';
+      zusatz.push(letzter ? `${obstipation} (letzter Stuhlgang vor ${letzter})` : obstipation);
+      return { main, extra: list(zusatz) };
     }
     case 'dysurie': {
       P('O', v('a-dys-onset'));
@@ -131,11 +149,9 @@ function generateSymptomBlock(key) {
         c('a-dys-ausfluss') ? 'genitaler Ausfluss/Juckreiz' : '',
         c('a-dys-flanke') ? 'Flankenschmerzen' : ''
       ]);
-      let s = 'Dysurie';
-      if (parts.length) s += ` (${parts.join(', ')})`;
-      s += '.';
-      if (extra) s += ` Begleitend: ${extra}.`;
-      return s;
+      let main = 'Dysurie';
+      if (parts.length) main += ` (${parts.join(', ')})`;
+      return { main, extra };
     }
     case 'diarrhoe': {
       const qual = { waessrig: 'wässrige', blutig: 'blutige', schleimig: 'schleimige' }[r('a-diarr-qualitaet')] || 'wässrige';
@@ -144,15 +160,15 @@ function generateSymptomBlock(key) {
       const ursacheKey = r('a-diarr-ursache');
       const ursacheText = v('a-diarr-ursache-text');
       const ursache = { ced: 'bekannter CED', infektion: 'bekannter Infektion', immunsuppression: 'bekannter Immunsuppression' }[ursacheKey];
-      let s = `${cap(qual)} Diarrhoe`;
+      let main = `${cap(qual)} Diarrhoe`;
       const inner = [];
       if (dauer) inner.push(`O: seit ${dauer}`);
       if (freq) inner.push(`S: ${freq}`);
-      if (inner.length) s += ` (${inner.join(', ')})`;
-      s += '.';
-      if (ursache) s += ` Bei ${ursache}${ursacheText ? ' (' + ursacheText + ')' : ''}.`;
-      else if (ursacheText) s += ` ${ursacheText}.`;
-      return s;
+      if (inner.length) main += ` (${inner.join(', ')})`;
+      let extra = '';
+      if (ursache) extra = `bei ${ursache}${ursacheText ? ' (' + ursacheText + ')' : ''}`;
+      else if (ursacheText) extra = ursacheText;
+      return { main, extra };
     }
     case 'schwindel': {
       const typ = r('a-schwindel-typ') === 'schwank' ? 'Schwankschwindel' : 'Drehschwindel';
@@ -164,11 +180,9 @@ function generateSymptomBlock(key) {
         c('a-schwindel-hoerminderung') ? 'Hörminderung/Tinnitus' : '',
         c('a-schwindel-kardial') ? 'kardiale Leitsymptome' : ''
       ]);
-      let s = `${typ}: ${beginn}${dauer ? ' seit ' + dauer : ''}`;
-      if (trigger) s += `, Auftreten bei ${trigger}`;
-      s += '.';
-      if (extra) s += ` Begleitend: ${extra}.`;
-      return s;
+      let main = `${typ}: ${beginn}${dauer ? ' seit ' + dauer : ''}`;
+      if (trigger) main += `, Auftreten bei ${trigger}`;
+      return { main, extra };
     }
     case 'teerstuhl': {
       const dauer = v('a-teer-dauer');
@@ -179,14 +193,12 @@ function generateSymptomBlock(key) {
         c('a-teer-oberbauch') ? 'Oberbauchschmerzen' : '',
         c('a-teer-kardial') ? 'kardiale Symptome' : ''
       ]);
-      let s = 'Teerstuhl';
+      let main = 'Teerstuhl';
       const inner = [];
       if (dauer) inner.push(`seit ${dauer}`);
       if (freq) inner.push(freq);
-      if (inner.length) s += ` (${inner.join(', ')})`;
-      s += '.';
-      if (extra) s += ` Begleitend: ${extra}.`;
-      return s;
+      if (inner.length) main += ` (${inner.join(', ')})`;
+      return { main, extra };
     }
     case 'haematochezie': {
       const dauer = v('a-haem-dauer');
@@ -200,16 +212,14 @@ function generateSymptomBlock(key) {
         c('a-haem-kardial') ? 'kardiale Symptome' : '',
         c('a-haem-defaekationsschmerz') ? 'Defäkationsschmerz' : ''
       ]);
-      let s = 'Hämatochezie';
+      let main = 'Hämatochezie';
       const inner = [];
       if (dauer) inner.push(`O: seit ${dauer}`);
       if (qual) inner.push(`Q: ${qual}`);
       if (region) inner.push(`R: ${region}`);
       if (freq) inner.push(`S: ${freq}`);
-      if (inner.length) s += ` (${inner.join(', ')})`;
-      s += '.';
-      if (extra) s += ` Begleitend: ${extra}.`;
-      return s;
+      if (inner.length) main += ` (${inner.join(', ')})`;
+      return { main, extra };
     }
     case 'sonstige': {
       P('O', v('a-sonst-onset'));
@@ -219,14 +229,27 @@ function generateSymptomBlock(key) {
       const staerke = v('a-sonst-staerke');
       P('S', staerke ? `${staerke}/10` : '');
       P('T', v('a-sonst-verlauf'));
-      let s = 'Schmerzen';
-      if (parts.length) s += ` (${parts.join(', ')})`;
-      s += '.';
-      return s;
+      let main = 'Schmerzen';
+      if (parts.length) main += ` (${parts.join(', ')})`;
+      return { main, extra: '' };
     }
     default:
-      return '';
+      return null;
   }
+}
+
+function generateSymptome(keys) {
+  if (!keys.length) return '___';
+  const blocks = keys.map((k) => ({ key: k, ...buildSymptomBlock(k) })).filter((b) => b.main);
+  if (!blocks.length) return '___';
+  const multi = blocks.length > 1;
+  const mainSentence = `${cap(list(blocks.map((b) => b.main)))}.`;
+  const extraLines = blocks
+    .filter((b) => b.extra)
+    .map((b) => multi
+      ? `Begleitend (${SYMPTOM_LABELS[b.key]}): ${b.extra}.`
+      : `Begleitend: ${b.extra}.`);
+  return [mainSentence, ...extraLines].join('\n');
 }
 
 /* ---------- section generators ---------- */
@@ -241,8 +264,7 @@ function generateAnamnese() {
   out.push('');
 
   out.push('SYMPTOME');
-  const symptomText = generateSymptomBlock(v('a-leitsymptom'));
-  out.push(symptomText || '___');
+  out.push(generateSymptome(selectedSymptomKeys()));
   out.push('');
 
   out.push('Kardiopulmonal:');
